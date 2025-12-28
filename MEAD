@@ -1,169 +1,147 @@
 -- ADOPT ME SPAWNER
 -- MADE BY DRXSCRIPTS
 
-pcall(function()
-	game.Players.LocalPlayer.PlayerGui:FindFirstChild("DRX_SPAWNER_GUI"):Destroy()
-end)
-
 local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
+local player = Players.LocalPlayer
 
--- ScreenGui
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DRX_SPAWNER_GUI"
-ScreenGui.Parent = Player:WaitForChild("PlayerGui")
-ScreenGui.ResetOnSpawn = false
+-- GUI SETUP
+local gui = Instance.new("ScreenGui")
+gui.Name = "AdoptMeSpawnerUI"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
 
--- Main Frame (PIXEL BASED – EXECUTOR SAFE)
-local Main = Instance.new("Frame")
-Main.Parent = ScreenGui
-Main.Size = UDim2.new(0, 300, 0, 340)
-Main.Position = UDim2.new(0.5, -150, 0.5, -170)
-Main.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-Main.BorderSizePixel = 0
-Main.Active = true
-Main.Draggable = true
-Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 18)
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.fromScale(0.25, 0.28)
+main.Position = UDim2.fromScale(0.375, 0.35)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 18)
 
--- Title
-local Title = Instance.new("TextLabel")
-Title.Parent = Main
-Title.Size = UDim2.new(1, 0, 0, 40)
-Title.Position = UDim2.new(0, 0, 0, 6)
-Title.BackgroundTransparency = 1
-Title.Text = "ADOPT ME SPAWNER"
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 18
-Title.TextColor3 = Color3.new(1,1,1)
-Title.TextXAlignment = Enum.TextXAlignment.Center
+-- TITLE
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.fromScale(1, 0.18)
+title.BackgroundTransparency = 1
+title.Text = "ADOPT ME SPAWNER"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255,255,255)
 
--- Freeze Trade Button
-local Freeze = Instance.new("TextButton")
-Freeze.Parent = Main
-Freeze.Size = UDim2.new(1, -30, 0, 42)
-Freeze.Position = UDim2.new(0, 15, 0, 55)
-Freeze.Text = "FREEZE TRADE"
-Freeze.Font = Enum.Font.GothamBold
-Freeze.TextSize = 14
-Freeze.TextColor3 = Color3.new(1,1,1)
-Freeze.BackgroundColor3 = Color3.fromRGB(60,60,60)
-Freeze.BorderSizePixel = 0
-Instance.new("UICorner", Freeze).CornerRadius = UDim.new(0, 12)
+-- FREEZE TRADE
+local freeze = Instance.new("TextButton", main)
+freeze.Position = UDim2.fromScale(0.1, 0.22)
+freeze.Size = UDim2.fromScale(0.8, 0.16)
+freeze.Text = "FREEZE TRADE"
+freeze.Font = Enum.Font.GothamBold
+freeze.TextSize = 14
+freeze.BackgroundColor3 = Color3.fromRGB(45,45,45)
+freeze.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", freeze).CornerRadius = UDim.new(0, 12)
 
-local frozen = false
-Freeze.MouseButton1Click:Connect(function()
-	frozen = not frozen
-	Freeze.BackgroundColor3 = frozen and Color3.fromRGB(140,70,70) or Color3.fromRGB(60,60,60)
-end)
+-- PET DROPDOWN
+local petButton = Instance.new("TextButton", main)
+petButton.Position = UDim2.fromScale(0.1, 0.42)
+petButton.Size = UDim2.fromScale(0.8, 0.14)
+petButton.Text = "SELECT PET TO SPAWN  ▼"
+petButton.Font = Enum.Font.Gotham
+petButton.TextSize = 13
+petButton.BackgroundColor3 = Color3.fromRGB(40,40,40)
+petButton.TextColor3 = Color3.fromRGB(220,220,220)
+Instance.new("UICorner", petButton).CornerRadius = UDim.new(0, 10)
 
--- Select Pet Button
-local SelectPet = Instance.new("TextButton")
-SelectPet.Parent = Main
-SelectPet.Size = UDim2.new(1, -30, 0, 36)
-SelectPet.Position = UDim2.new(0, 15, 0, 110)
-SelectPet.Text = "SELECT PET TO SPAWN  ▼"
-SelectPet.Font = Enum.Font.Gotham
-SelectPet.TextSize = 13
-SelectPet.TextColor3 = Color3.new(1,1,1)
-SelectPet.BackgroundColor3 = Color3.fromRGB(50,50,50)
-SelectPet.BorderSizePixel = 0
-Instance.new("UICorner", SelectPet).CornerRadius = UDim.new(0, 10)
+-- DROPDOWN LIST
+local drop = Instance.new("Frame", main)
+drop.Position = UDim2.fromScale(0.1, 0.57)
+drop.Size = UDim2.fromScale(0.8, 0)
+drop.BackgroundColor3 = Color3.fromRGB(35,35,35)
+drop.Visible = false
+drop.ClipsDescendants = true
+Instance.new("UICorner", drop).CornerRadius = UDim.new(0, 10)
 
--- Dropdown
-local Drop = Instance.new("ScrollingFrame")
-Drop.Parent = Main
-Drop.Size = UDim2.new(1, -30, 0, 120)
-Drop.Position = UDim2.new(0, 15, 0, 150)
-Drop.Visible = false
-Drop.CanvasSize = UDim2.new(0,0,0,0)
-Drop.ScrollBarImageTransparency = 0.3
-Drop.BackgroundColor3 = Color3.fromRGB(26,26,26)
-Drop.BorderSizePixel = 0
-Instance.new("UICorner", Drop).CornerRadius = UDim.new(0, 10)
+local layout = Instance.new("UIListLayout", drop)
+layout.Padding = UDim.new(0, 4)
 
-local UIList = Instance.new("UIListLayout", Drop)
-UIList.Padding = UDim.new(0, 6)
-
-local Pets = {
+-- HIGH ➜ LOW TIER PETS (VISUAL)
+local pets = {
 	"Shadow Dragon","Bat Dragon","Giraffe","Frost Dragon",
 	"Owl","Parrot","Evil Unicorn","Crow",
-	"Arctic Reindeer","Albino Monkey","Turtle","Kangaroo",
-	"Diamond Unicorn","Diamond Dragon",
-	"Gold Unicorn","Gold Dragon",
-	"Queen Bee","Phoenix","Goldhorn",
-	"Unicorn","Dragon","Kitsune","Griffin"
+	"Arctic Reindeer","Turtle","Kangaroo",
+	"Albino Monkey","Diamond Unicorn","Golden Unicorn",
+	"Unicorn","Dragon","Griffin"
 }
 
-for _, pet in ipairs(Pets) do
-	local Btn = Instance.new("TextButton")
-	Btn.Parent = Drop
-	Btn.Size = UDim2.new(1, -10, 0, 28)
-	Btn.Text = pet
-	Btn.Font = Enum.Font.Gotham
-	Btn.TextSize = 13
-	Btn.TextColor3 = Color3.new(1,1,1)
-	Btn.BackgroundColor3 = Color3.fromRGB(55,55,55)
-	Btn.BorderSizePixel = 0
-	Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
+local selectedPet = "None"
+local selectedType = "F"
 
-	Btn.MouseButton1Click:Connect(function()
-		SelectPet.Text = pet .. "  ▼"
-		Drop.Visible = false
+for _,name in ipairs(pets) do
+	local b = Instance.new("TextButton", drop)
+	b.Size = UDim2.new(1, -10, 0, 26)
+	b.Text = name
+	b.Font = Enum.Font.Gotham
+	b.TextSize = 12
+	b.BackgroundColor3 = Color3.fromRGB(45,45,45)
+	b.TextColor3 = Color3.fromRGB(230,230,230)
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 8)
+
+	b.MouseButton1Click:Connect(function()
+		selectedPet = name
+		petButton.Text = name .. "  ▼"
+		drop.Visible = false
+		drop.Size = UDim2.fromScale(0.8, 0)
 	end)
 end
 
-UIList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-	Drop.CanvasSize = UDim2.new(0,0,0,UIList.AbsoluteContentSize.Y + 10)
+petButton.MouseButton1Click:Connect(function()
+	drop.Visible = not drop.Visible
+	drop.Size = drop.Visible and UDim2.fromScale(0.8, 0.45) or UDim2.fromScale(0.8, 0)
 end)
 
-SelectPet.MouseButton1Click:Connect(function()
-	Drop.Visible = not Drop.Visible
-end)
+-- F / R / NFR / MFR BUTTONS
+local types = {"F","R","NFR","MFR"}
+local typeFrame = Instance.new("Frame", main)
+typeFrame.Position = UDim2.fromScale(0.1, 0.73)
+typeFrame.Size = UDim2.fromScale(0.8, 0.12)
+typeFrame.BackgroundTransparency = 1
 
--- Variant Buttons
-local VariantFrame = Instance.new("Frame")
-VariantFrame.Parent = Main
-VariantFrame.Size = UDim2.new(1, -30, 0, 36)
-VariantFrame.Position = UDim2.new(0, 15, 0, 280)
-VariantFrame.BackgroundTransparency = 1
+for i,t in ipairs(types) do
+	local b = Instance.new("TextButton", typeFrame)
+	b.Size = UDim2.fromScale(0.22, 1)
+	b.Position = UDim2.fromScale((i-1)*0.26, 0)
+	b.Text = t
+	b.Font = Enum.Font.GothamBold
+	b.TextSize = 12
+	b.BackgroundColor3 = Color3.fromRGB(50,50,50)
+	b.TextColor3 = Color3.fromRGB(255,255,255)
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 8)
 
-local VList = Instance.new("UIListLayout", VariantFrame)
-VList.FillDirection = Enum.FillDirection.Horizontal
-VList.HorizontalAlignment = Enum.HorizontalAlignment.Center
-VList.Padding = UDim.new(0, 8)
-
-local variants = {"F","R","NFR","MFR"}
-
-for _, v in ipairs(variants) do
-	local B = Instance.new("TextButton")
-	B.Parent = VariantFrame
-	B.Size = UDim2.new(0, 58, 1, 0)
-	B.Text = v
-	B.Font = Enum.Font.GothamBold
-	B.TextSize = 13
-	B.TextColor3 = Color3.new(1,1,1)
-	B.BackgroundColor3 = Color3.fromRGB(70,70,70)
-	B.BorderSizePixel = 0
-	Instance.new("UICorner", B).CornerRadius = UDim.new(0, 10)
-
-	B.MouseButton1Click:Connect(function()
-		for _, x in ipairs(VariantFrame:GetChildren()) do
-			if x:IsA("TextButton") then
-				x.BackgroundColor3 = Color3.fromRGB(70,70,70)
-			end
-		end
-		B.BackgroundColor3 = Color3.fromRGB(90,150,90)
+	b.MouseButton1Click:Connect(function()
+		selectedType = t
 	end)
 end
 
--- Footer
-local Footer = Instance.new("TextLabel")
-Footer.Parent = Main
-Footer.Size = UDim2.new(1, 0, 0, 22)
-Footer.Position = UDim2.new(0, 0, 1, -24)
-Footer.BackgroundTransparency = 1
-Footer.Text = "MADE BY DRXSCRIPTS"
-Footer.Font = Enum.Font.GothamBold
-Footer.TextSize = 11
-Footer.TextColor3 = Color3.fromRGB(170,170,170)
-Footer.TextXAlignment = Enum.TextXAlignment.Center
+-- SPAWN PET BUTTON
+local spawn = Instance.new("TextButton", main)
+spawn.Position = UDim2.fromScale(0.1, 0.87)
+spawn.Size = UDim2.fromScale(0.8, 0.12)
+spawn.Text = "SPAWN PET"
+spawn.Font = Enum.Font.GothamBold
+spawn.TextSize = 14
+spawn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+spawn.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", spawn).CornerRadius = UDim.new(0, 12)
+
+spawn.MouseButton1Click:Connect(function()
+	spawn.Text = "SPAWN PET ("..selectedType.." "..selectedPet..")"
+end)
+
+-- FOOTER
+local footer = Instance.new("TextLabel", main)
+footer.AnchorPoint = Vector2.new(0.5,1)
+footer.Position = UDim2.fromScale(0.5, 1)
+footer.Size = UDim2.fromScale(1, 0.1)
+footer.BackgroundTransparency = 1
+footer.Text = "MADE BY DRXSCRIPTS"
+footer.Font = Enum.Font.Gotham
+footer.TextSize = 11
+footer.TextColor3 = Color3.fromRGB(160,160,160)
