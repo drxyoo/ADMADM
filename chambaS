@@ -1,5 +1,5 @@
 -- ADOPT ME SPAWNER
--- MADE BY DRXSCRIPTS
+-- MADE BY DRXSCRIPTS (UI FIXED)
 
 pcall(function()
 	game.Players.LocalPlayer.PlayerGui:FindFirstChild("AdoptMeSpawnerUI"):Destroy()
@@ -14,10 +14,10 @@ gui.Name = "AdoptMeSpawnerUI"
 gui.ResetOnSpawn = false
 gui.Parent = player.PlayerGui
 
--- MAIN FRAME
+-- MAIN FRAME (slimmer but taller for pets)
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.fromScale(0.42, 0.55)
-main.Position = UDim2.fromScale(0.29, 0.22)
+main.Size = UDim2.fromScale(0.35, 0.6) -- width reduced, height increased
+main.Position = UDim2.fromScale(0.32, 0.2)
 main.BackgroundColor3 = Color3.fromRGB(25,25,25)
 main.BorderSizePixel = 0
 main.Active = true
@@ -39,7 +39,7 @@ title.TextSize = 22
 title.TextColor3 = Color3.new(1,1,1)
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- MINIMIZE BUTTON (CHROME STYLE)
+-- MINIMIZE BUTTON
 local minimize = Instance.new("TextButton", titleBar)
 minimize.Size = UDim2.fromScale(0.08, 0.6)
 minimize.Position = UDim2.fromScale(0.9, 0.2)
@@ -54,13 +54,13 @@ local fullSize = main.Size
 
 minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
-	main.Size = minimized and UDim2.fromScale(0.42, 0.1) or fullSize
+	main.Size = minimized and UDim2.fromScale(0.35, 0.1) or fullSize
 end)
 
 -- FREEZE TRADE
 local freeze = Instance.new("TextButton", main)
 freeze.Position = UDim2.fromScale(0.08, 0.12)
-freeze.Size = UDim2.fromScale(0.84, 0.09)
+freeze.Size = UDim2.fromScale(0.84, 0.08) -- slightly smaller height
 freeze.Text = "FREEZE TRADE"
 freeze.Font = Enum.Font.GothamBold
 freeze.TextSize = 16
@@ -70,8 +70,8 @@ Instance.new("UICorner", freeze).CornerRadius = UDim.new(0, 14)
 
 -- SEARCH BOX
 local search = Instance.new("TextBox", main)
-search.Position = UDim2.fromScale(0.08, 0.23)
-search.Size = UDim2.fromScale(0.84, 0.08)
+search.Position = UDim2.fromScale(0.08, 0.21)
+search.Size = UDim2.fromScale(0.84, 0.07) -- adjusted height
 search.PlaceholderText = "Search pet name..."
 search.Text = ""
 search.Font = Enum.Font.Gotham
@@ -83,8 +83,8 @@ Instance.new("UICorner", search).CornerRadius = UDim.new(0, 12)
 
 -- PET DROPDOWN FRAME
 local drop = Instance.new("Frame", main)
-drop.Position = UDim2.fromScale(0.08, 0.33)
-drop.Size = UDim2.fromScale(0.84, 0.33)
+drop.Position = UDim2.fromScale(0.08, 0.31)
+drop.Size = UDim2.fromScale(0.84, 0.42) -- increased height for pet list
 drop.BackgroundColor3 = Color3.fromRGB(30,30,30)
 drop.ClipsDescendants = true
 Instance.new("UICorner", drop).CornerRadius = UDim.new(0, 14)
@@ -101,7 +101,7 @@ scroll.BackgroundTransparency = 1
 local layout = Instance.new("UIListLayout", scroll)
 layout.Padding = UDim.new(0, 6)
 
--- PET LIST (VERY LARGE)
+-- PET LIST
 local pets = {
 -- HIGH TIER
 "Shadow Dragon","Bat Dragon","Giraffe","Frost Dragon","Owl","Parrot","Crow","Evil Unicorn",
@@ -131,7 +131,7 @@ local function createPetButtons()
 
 	for _, pet in ipairs(pets) do
 		local btn = Instance.new("TextButton", scroll)
-		btn.Size = UDim2.new(1, -12, 0, 34)
+		btn.Size = UDim2.new(1, -12, 0, 30) -- slightly smaller for slimmer UI
 		btn.Text = pet
 		btn.Font = Enum.Font.Gotham
 		btn.TextSize = 14
@@ -159,8 +159,8 @@ end)
 
 -- TYPE BUTTONS
 local typeFrame = Instance.new("Frame", main)
-typeFrame.Position = UDim2.fromScale(0.08, 0.68)
-typeFrame.Size = UDim2.fromScale(0.84, 0.08)
+typeFrame.Position = UDim2.fromScale(0.08, 0.74)
+typeFrame.Size = UDim2.fromScale(0.84, 0.07) -- slightly smaller
 typeFrame.BackgroundTransparency = 1
 
 local typeColors = {
@@ -196,7 +196,7 @@ end
 
 -- SPAWN BUTTON
 local spawn = Instance.new("TextButton", main)
-spawn.Position = UDim2.fromScale(0.08, 0.79)
+spawn.Position = UDim2.fromScale(0.08, 0.82)
 spawn.Size = UDim2.fromScale(0.84, 0.1)
 spawn.Text = "SPAWN PET"
 spawn.Font = Enum.Font.GothamBold
